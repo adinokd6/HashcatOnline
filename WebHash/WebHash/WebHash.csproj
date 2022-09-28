@@ -21,6 +21,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="frontend\src\Components\HashForm.tsx" />
+    <None Remove="frontend\src\Components\MainWindow.tsx" />
+    <None Remove="frontend\src\Components\NavigationBar.tsx" />
+    <None Remove="frontend\src\Plugins\fetchWrapper.tsx" />
+    <None Remove="frontend\src\Plugins\GlobalStyles.tsx" />
+    <None Remove="frontend\src\Plugins\styled.d.ts" />
+    <None Remove="frontend\src\Plugins\ThemeButton.tsx" />
+    <None Remove="frontend\src\Plugins\ThemeContext.tsx" />
+    <None Remove="frontend\src\Plugins\Themes.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
@@ -30,6 +42,18 @@
 
   <ItemGroup>
     <Folder Include="Views\Home\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="frontend\src\Components\HashForm.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\MainWindow.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\NavigationBar.tsx" />
+    <TypeScriptCompile Include="frontend\src\Plugins\fetchWrapper.tsx" />
+    <TypeScriptCompile Include="frontend\src\Plugins\GlobalStyles.tsx" />
+    <TypeScriptCompile Include="frontend\src\Plugins\styled.d.ts" />
+    <TypeScriptCompile Include="frontend\src\Plugins\ThemeButton.tsx" />
+    <TypeScriptCompile Include="frontend\src\Plugins\ThemeContext.tsx" />
+    <TypeScriptCompile Include="frontend\src\Plugins\Themes.tsx" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

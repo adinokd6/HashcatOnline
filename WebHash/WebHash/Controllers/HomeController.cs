@@ -2,10 +2,14 @@
 using WebHash.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebHash.Models.Enums;
+using System.Threading.Tasks;
 
 namespace WebHash.Controllers
 {
-    public class HomeController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class HomeController : ControllerBase
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHashService _hashService;
@@ -16,10 +20,26 @@ namespace WebHash.Controllers
             _hashService = hashService;
         }
 
-        public IActionResult Index(Hash hash)
+        [HttpPost]
+        [Route("Decode")]
+        public async Task<ActionResult> DecodeHash(InputHash inputHash)
         {
-            _hashService.Decode(hash);
-            return View(hash);
+            Hash hash = new Hash();
+
+            if (hash.InputValue != null)
+            {
+                _hashService.Decode(hash);
+                //return Json(new { decoded = hash.OutputValue.Item1, errorMessage = hash.OutputValue.Item2 });
+                return Ok();
+            }
+            return Ok("dupa");
+
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Test()
+        {
+            return Ok("elo");
         }
 
 
