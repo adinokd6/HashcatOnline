@@ -2,50 +2,33 @@
 using WebHash.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WebHash.Models.Enums;
-using System.Threading.Tasks;
-using System;
+using System.Collections.Generic;
 
 namespace WebHash.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class HomeController : ControllerBase
+    public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHashService _hashService;
+        private readonly ICsvService _csvService;
 
-        public HomeController(ILogger<HomeController> logger, IHashService hashService)
+        public HomeController(ILogger<HomeController> logger, IHashService hashService, ICsvService csvService)
         {
             _logger = logger;
             _hashService = hashService;
+            _csvService = csvService;
         }
 
-        [HttpPost]
-        [Route("Decode")]
-        public async Task<ActionResult> DecodeHash(InputHashModel inputHash)
+        public IActionResult Index(Hash hash)
         {
-            Hash hash = new Hash()
-            {
-                InputValue = inputHash.InputValue,
-                AttackMethod = (Enums.AttackMethod)Int32.Parse(inputHash.AttackMethod),
-                HashType = (Enums.HashType)Int32.Parse(inputHash.HashType)
-
-            };
-
-            if (hash.InputValue != null)
-            {
-                _hashService.Decode(hash);
-                return Ok(hash);
-            }
-            return Ok("dupa");
-
+            _hashService.Decode(hash);
+            return View(hash);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Test()
+        public IEnumerable<string> ReadCsv(string fileName)
         {
-            return Ok("elo");
+            return _csvService.ImportCsvFile(fileName);
         }
 
 

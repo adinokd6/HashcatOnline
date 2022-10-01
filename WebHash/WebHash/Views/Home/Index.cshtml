@@ -1,101 +1,110 @@
 ﻿@using static WebHash.Models.Enums.Enums
 @model WebHash.Models.Hash
 
-<div class="row">
-    <div class="col">
-        <div id="form" class="mytab">
 
-            <form asp-action="Index">
-                <div class="form-group">
-                    <label asp-for="InputValue" class="control-label label"></label>
-                    <textarea asp-for="InputValue" class="form-control" placeholder="fedd1d1122aa65028c81e16ceb85d9c73790a2fa"></textarea>
-                    <span asp-validation-for="InputValue" class="text-danger"></span>
+<div>
+    <div class="row" style="margin-left: 10px;">
+        <div class="col">
+            <div id="loadingDiv" style="display: none;">
+                <div class="text-center spinner justify-content-center" id='spinner'>
+                    <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
+                        <span class="sr-only">Your hash is decoding... it may take a moment</span>
+                    </div>
+                    <div>
+                        <b id="text-spinner">  Your hash is decoding... it may take a moment</b>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="HashType" class="control-label label"></label>
-                    <select asp-for="HashType" class="form-control" asp-items="@Html.GetEnumSelectList<HashType>()"></select>
-                    <span asp-validation-for="HashType" class="text-danger"></span>
+            </div>
+            @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "hashForm" }))
+            {
+                <div>
+                    <div class="form-group">
+                        <label asp-for="InputValue" class="control-label label"></label>
+                        <textarea asp-for="InputValue" class="form-control" placeholder="fedd1d1122aa65028c81e16ceb85d9c73790a2fa"></textarea>
+                        <span asp-validation-for="InputValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HashType" class="control-label label"></label>
+                        <select asp-for="HashType" class="form-control" asp-items="@Html.GetEnumSelectList<HashType>()"></select>
+                        <span asp-validation-for="HashType" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="AttackMethod" class="control-label label"></label>
+                        <select asp-for="AttackMethod" class="form-control" asp-items="@Html.GetEnumSelectList<AttackMethod>()"></select>
+                        <span asp-validation-for="AttackMethod" class="text-danger"></span>
+                    </div>
+                    <div id="dict">
+                        @if (Model.AttackMethod == AttackMethod.Straight)
+                        {
+                            <div class="form-group">
+                                <label asp-for="Dictionary1" class="control-label label"></label>
+                                <textarea asp-for="Dictionary1" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
+                                <span asp-validation-for="Dictionary1" class="text-danger"></span>
+                            </div>
+                        }
+                        else if (Model.AttackMethod == AttackMethod.Combination)
+                        {
+                            <div class="form-group">
+                                <label asp-for="Dictionary2" class="control-label label"></label>
+                                <textarea asp-for="Dictionary2" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
+                                <span asp-validation-for="Dictionary2" class="text-danger"></span>
+                            </div>
+                        }
+                    </div>
+                    <div class="submit" id="btnSubmit">
+                        <input type="submit" style="margin-top:16px" value="Crack" class="btn btn-primary text-center" id="submitButton">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="AttackMethod" class="control-label label"></label>
-                    <select asp-for="AttackMethod" class="form-control" asp-items="@Html.GetEnumSelectList<AttackMethod>()"></select>
-                    <span asp-validation-for="AttackMethod" class="text-danger"></span>
-                </div>
-                <div id="dict">
-                    @if (Model.AttackMethod == AttackMethod.Straight)
-                    {
-                        <div class="form-group">
-                            <label asp-for="Dictionary1" class="control-label label"></label>
-                            <textarea asp-for="Dictionary1" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
-                            <span asp-validation-for="Dictionary1" class="text-danger"></span>
-                        </div>
-                    }
-                    else if (Model.AttackMethod == AttackMethod.Combination)
-                    {
-                        <div class="form-group">
-                            <label asp-for="Dictionary2" class="control-label label"></label>
-                            <textarea asp-for="Dictionary2" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
-                            <span asp-validation-for="Dictionary2" class="text-danger"></span>
-                        </div>
-                    }
-                </div>
-                <div class="submit">
-                    <input type="submit" style="margin-top:16px" value="Crack" class="btn btn-primary text-center" id="submitButton">
-                </div>
-
-            </form>
+            }
         </div>
-    </div>
-    <div class="col">
-        <div class="coded">
-            <div class="coded-logo">
-                <img src="~/Images/coded.png" />
-                <div class="text-justify text">
-                    This web app is created for helping with cracking simple hashes. You can choose hash type and attack mode in select buttons and then type the source to file with your hash in text window.
-                    The next step is to click CRACK button and wait for cracking to end. When everything work fine you will see your cracked password.
-                </div>
-                <br />
-                <div class="text-justify text">
-                    @if (Model.OutputValue != null && Model.OutputValue.Item1 != null)
+        <div class="col">
+            <div>
+                @using (Html.BeginForm("ReadCsv", "Home", FormMethod.Get, new { id = "csvForm" }))
+                {
+                    <div class="form-group">
+                        <label for="fileName" id="fileName" name="fileName" class="control-label label"></label>
+                        <textarea for="fileName" id="fileName" name="fileName" class="form-control"></textarea>
+                    </div>
+                    <div class="submit" id="btnSubmit">
+                        <input type="submit" style="margin-top:16px" value="Crack" class="btn btn-primary text-center">
+                    </div>
+                }
+            </div>
+            <div class="text-justify text">
+                @if (Model.OutputValue != null && Model.OutputValue.Item1 != null)
+                {
+                    <div>
+                        Your hash was:
+                        <b>@Model.OutputValue.Item1</b>
+                    </div>
+                    <div>
+                        Decrypted password:
+                        <b>@Model.OutputValue.Item2</b>
+                    </div>
+                }
+                else if (Model.OutputValue != null)
+                {
+                    if (Model.OutputValue.Item1 == null && Model.OutputValue.Item2 != null)
                     {
                         <div>
-                            Your hash was:
-                            <b>@Model.OutputValue.Item1</b>
-                        </div>
-                        <div>
-                            Decrypted password:
+                            Error occured:
                             <b>@Model.OutputValue.Item2</b>
                         </div>
                     }
-                    else if (Model.OutputValue != null)
-                    {
-                        if (Model.OutputValue.Item1 == null && Model.OutputValue.Item2 != null)
-                        {
-                            <div>
-                                Error occured:
-                                <b>@Model.OutputValue.Item2</b>
-                            </div>
-                        }
 
-                    }
-                </div>
+                }
             </div>
         </div>
     </div>
 </div>
-<div>
-    <div class="text-center spinner justify-content-center" hidden id='spinner'>
-        <div class="spinner-border" style="width: 5rem; height: 5rem;" role="status">
-            <span class="sr-only">Your hash is decoding... it may take a moment</span>
-        </div>
-        <div>
-            <b id="text-spinner">  Your hash is decoding... it may take a moment</b>
-        </div>
-    </div>
-
-</div>
 @section Scripts {
-    <script src="@Url.Content("~/js/Site.js")" asp-append-version="true"></script>
-    <script>
-    </script>
+<script src="@Url.Content("~/js/Site.js")" asp-append-version="true"></script>
+<script>
+        $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+            $('#loadingDiv').css('display', 'block');
+            $('#hashForm').css('display','none')
+        });
+    });
+</script>
 }

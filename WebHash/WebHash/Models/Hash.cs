@@ -25,5 +25,7 @@ namespace WebHash.Models
         [Display(Name = "Choose second dictionary for this attack method")]
         public string Dictionary2 { get; set; }
 
+        public bool IsCracking { get; set; }
+
     }
 }
