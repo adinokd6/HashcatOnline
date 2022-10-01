@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebHash.Models.Enums;
 using System.Threading.Tasks;
+using System;
 
 namespace WebHash.Controllers
 {
@@ -22,15 +23,20 @@ namespace WebHash.Controllers
 
         [HttpPost]
         [Route("Decode")]
-        public async Task<ActionResult> DecodeHash(InputHash inputHash)
+        public async Task<ActionResult> DecodeHash(InputHashModel inputHash)
         {
-            Hash hash = new Hash();
+            Hash hash = new Hash()
+            {
+                InputValue = inputHash.InputValue,
+                AttackMethod = (Enums.AttackMethod)Int32.Parse(inputHash.AttackMethod),
+                HashType = (Enums.HashType)Int32.Parse(inputHash.HashType)
+
+            };
 
             if (hash.InputValue != null)
             {
                 _hashService.Decode(hash);
-                //return Json(new { decoded = hash.OutputValue.Item1, errorMessage = hash.OutputValue.Item2 });
-                return Ok();
+                return Ok(hash);
             }
             return Ok("dupa");
 

@@ -21,9 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="frontend\src\Components\FilesTab\FilesTab.tsx" />
     <None Remove="frontend\src\Components\HashForm.tsx" />
+    <None Remove="frontend\src\Components\HistoryTab\HistoryTab.tsx" />
     <None Remove="frontend\src\Components\MainWindow.tsx" />
     <None Remove="frontend\src\Components\NavigationBar.tsx" />
+    <None Remove="frontend\src\Components\Tools\Tools.tsx" />
     <None Remove="frontend\src\Plugins\fetchWrapper.tsx" />
     <None Remove="frontend\src\Plugins\GlobalStyles.tsx" />
     <None Remove="frontend\src\Plugins\styled.d.ts" />
@@ -45,9 +48,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="frontend\src\Components\HashForm.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\FilesTab\FilesTab.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\HashTab\HashForm.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\HistoryTab\HistoryTab.tsx" />
     <TypeScriptCompile Include="frontend\src\Components\MainWindow.tsx" />
     <TypeScriptCompile Include="frontend\src\Components\NavigationBar.tsx" />
+    <TypeScriptCompile Include="frontend\src\Components\Tools\Tools.tsx" />
     <TypeScriptCompile Include="frontend\src\Plugins\fetchWrapper.tsx" />
     <TypeScriptCompile Include="frontend\src\Plugins\GlobalStyles.tsx" />
     <TypeScriptCompile Include="frontend\src\Plugins\styled.d.ts" />

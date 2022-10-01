@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using WebHash.IServices;
 using WebHash.Services;
 using WebHash.Interfaces;
+using System.Text.Json.Serialization;
 
 namespace WebHash
 {
@@ -31,7 +32,6 @@ namespace WebHash
             services.AddSingleton<IStartProgramService, StartProgramService>();
 
             services.AddHttpClient();
-
             #endregion
 
             // In production, the React files will be served from this directory

@@ -42,7 +42,6 @@ function _delete(url) {
 
 function handleResponse(response) {
     return response.text().then(text => {
-        debugger;
         const data = text && JSON.parse(text);
 
         if (!response.ok) {
