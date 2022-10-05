@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\AddFile\" />
+    <Folder Include="Views\Statistics\" />
     <Folder Include="wwwroot\tmp\" />
   </ItemGroup>
 
