@@ -1,5 +1,5 @@
 ﻿@using static WebHash.Models.Enums.Enums
-@model WebHash.Models.Hash
+@model WebHash.Models.ViewModels.CrackHashViewModel
 
 
 <div>
@@ -58,18 +58,6 @@
             }
         </div>
         <div class="col">
-            <div>
-                @using (Html.BeginForm("ReadCsv", "Home", FormMethod.Get, new { id = "csvForm" }))
-                {
-                    <div class="form-group">
-                        <label for="fileName" id="fileName" name="fileName" class="control-label label"></label>
-                        <textarea for="fileName" id="fileName" name="fileName" class="form-control"></textarea>
-                    </div>
-                    <div class="submit" id="btnSubmit">
-                        <input type="submit" style="margin-top:16px" value="Crack" class="btn btn-primary text-center">
-                    </div>
-                }
-            </div>
             <div class="text-justify text">
                 @if (Model.OutputValue != null && Model.OutputValue.Item1 != null)
                 {

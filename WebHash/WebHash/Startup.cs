@@ -25,6 +25,12 @@ namespace WebHash
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region dbConfigure
+            services.AddDbContext<Context>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("WebHashConnection"))
+                );
+            #endregion
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             #region Dependency Injection
@@ -32,15 +38,13 @@ namespace WebHash
             services.AddSingleton<IHashService, HashService>();
             services.AddSingleton<IStartProgramService, StartProgramService>();
             services.AddSingleton<ICsvService, CsvService>();
+            services.AddSingleton<IFileService, FileService>();
 
             services.AddHttpClient();
 
             #endregion
 
-            #region dbConfigure
-            services.AddDbContextPool<Context>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("WebHashConnection")));
-            #endregion
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

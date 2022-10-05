@@ -7,7 +7,9 @@ namespace WebHash.DataModels
 {
     public class Context : DbContext
     {
-        DbSet<File> Files { get; set; }
+        public DbSet<File> Files { get; set; }
+
+        public DbSet<Hash> Hashes { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {

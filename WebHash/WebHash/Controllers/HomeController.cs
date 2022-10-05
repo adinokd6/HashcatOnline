@@ -1,8 +1,12 @@
 ﻿using WebHash.IServices;
-using WebHash.Models;
+using WebHash.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System;
+using WebHash.Interfaces;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace WebHash.Controllers
 {
@@ -10,25 +14,43 @@ namespace WebHash.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHashService _hashService;
-        private readonly ICsvService _csvService;
+        private readonly IFileService _fileService;
 
-        public HomeController(ILogger<HomeController> logger, IHashService hashService, ICsvService csvService)
+        public HomeController(ILogger<HomeController> logger, IHashService hashService, IFileService fileService)
         {
             _logger = logger;
             _hashService = hashService;
-            _csvService = csvService;
+            _fileService = fileService;
         }
 
-        public IActionResult Index(Hash hash)
+        public IActionResult Index(CrackHashViewModel hash)
         {
             _hashService.Decode(hash);
             return View(hash);
         }
 
         [HttpGet]
-        public IEnumerable<string> ReadCsv(string fileName)
+        public IActionResult SendFile()
         {
-            return _csvService.ImportCsvFile(fileName);
+            var vm = new SendFileViewModel();
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendFile(SendFileViewModel file)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var result = await _fileService.ImportFile(file.UploadedFile, file.FileName);
+                
+                if(!result)
+                {
+                    ModelState.AddModelError("Error: ", " there is some error with your file. Please check it before next upload.");
+                }
+            }
+
+            return View(file);
         }
 
 

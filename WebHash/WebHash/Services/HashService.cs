@@ -1,5 +1,5 @@
 ﻿using WebHash.IServices;
-using WebHash.Models;
+using WebHash.Models.ViewModels;
 using WebHash.Interfaces;
 using System;
 using System.IO;
@@ -17,7 +17,7 @@ namespace WebHash.Services
             _startProgram = startProgramService;
         }
 
-        public void Decode(Hash hash)
+        public void Decode(CrackHashViewModel hash)
         {
             if (!string.IsNullOrEmpty(hash.InputValue))
             {

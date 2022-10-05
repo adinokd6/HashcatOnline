@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using static WebHash.Models.Enums.Enums;
 
-namespace WebHash.Models
+namespace WebHash.Models.ViewModels
 {
-    public class Hash
+    public class CrackHashViewModel
     {
         public static object StandardError { get; internal set; }
         [Display(Name = "Type in your hash to crack")]

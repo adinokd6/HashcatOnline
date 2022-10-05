@@ -11,33 +11,25 @@ namespace WebHash.Services
 {
     public class CsvService : ICsvService
     {
-        #region Attributes
-        private List<string> hash = new List<string>();
-        #endregion
-
-
-
-
-        public IEnumerable<string> ImportCsvFile(string fileName)
+        public IEnumerable<string> ImportCsvFile(string filePath)
         {
-            var elo = ReadFromCsv(fileName);
+            var readedHashes = ReadFromCsv(filePath);
 
-            return elo;
+            return readedHashes;
         }
 
-        public IEnumerable<string> ReadFromCsv(string fileName)
+        private IEnumerable<string> ReadFromCsv(string filePath)
         {
-            if(!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(filePath))
             {
-                using (var reader = new StreamReader(fileName))
+                using (var reader = new StreamReader(filePath))
                 {
                     try
                     {
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
-                            var elo = csv.GetRecords<CsvLine>();
-                            var elo2 = elo.Where(x => x.Hash != null).Select(x => x.Hash).ToList();
-                            return elo2;
+                            var hashes = csv.GetRecords<CsvLine>();
+                            return hashes.Where(x => x.Hash != null).Select(x => x.Hash).ToList();
                         }
                     }
                     catch (Exception ex)
@@ -47,7 +39,7 @@ namespace WebHash.Services
                 }
             }
             return null;
-            
+
         }
     }
 }

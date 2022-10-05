@@ -1,4 +1,4 @@
-﻿using WebHash.Models;
+﻿using WebHash.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,6 @@ namespace WebHash.IServices
 {
     public interface IHashService
     {
-        public void Decode(Hash hash);
+        public void Decode(CrackHashViewModel hash);
     }
 }
