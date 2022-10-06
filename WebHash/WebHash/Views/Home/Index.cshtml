@@ -2,9 +2,7 @@
 
 <div>
     <div class="row" style="margin-left: 10px;">
-
-            @Html.Partial("Partials/HashForm", Model)
-        
+        @Html.Partial("Partials/HashForm", Model)
     </div>
 </div>
 @section Scripts {
@@ -16,19 +14,52 @@
             $.ajax({
                 url: '@Url.Action("CrackHash", "Home")',
                 type: "POST",
-                data: $("form").serialize(),
+                data: $("#hashForm").serialize(),
                 success: function (result) {
                     $("#updateForHash").html(result);
-                    $('#hashForm').css('display','unset');
+                    $('#hashForm').css('display','none');
                 },
                 beforeSend: function(){
                     $('#loadingDiv').css('display', 'block');
                     $('#hashForm').css('display','none');
                 }
             });
-            
-            
         });
+
+        $('#HashFromInput').on("change", function(){
+            if($('#HashFromInput').is(":checked")){
+                $("#fromFileSelect").css('display', 'none');
+                $("#inputValue").css('display', 'block');
+            }
+            else{
+                $("#fromFileSelect").css('display', 'block');
+                $("#inputValue").css('display', 'none');
+            }
+        })
+
+        $('#file').on("change",function () {
+            $.ajax({
+                url: '@Url.Action("GetHashes", "Home")',
+                type: "GET",
+                data: { "fileId": $("#file").val() },
+                success: function (result) {
+                    var items = '';
+                    var first = true;
+                    $(result).each(function(){
+                        if(first){
+                        items += "<option selected='selected' value=" + this.value + ">" + this.text + "</option>";
+                        first = false;
+                        }
+                        items += "<option value=" + this.value + ">" + this.text + "</option>";
+                    })
+                    $("#HashFromFileId").html(items);
+                },
+                error: function(result){
+                    alert(result.responseText)
+                }
+            });
+        });
+
     });
 </script>
 }

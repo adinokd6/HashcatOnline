@@ -15,8 +15,21 @@
     @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "hashForm" }))
     {
         <div class="col">
-            <div>
-                <div class="form-group">
+            <div style="width: 700px;">
+                <div class="form-group custom-switch">
+                    <input asp-for="HashFromInput" type="checkbox" checked>
+                    <label asp-for="HashFromInput">Show input for providing hash by your own</label>
+                </div>
+                <div id="fromFileSelect" style="display: none">
+                    <div >
+                        @Html.DropDownList("file",new SelectList(Model.Files, "Id", "Name"), "Select file", new { @class="form-control" })
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="HashFromFileId" class="control-label label">Select hash you want to crack</label>
+                        <select asp-for="HashFromFileId" class="form-control"></select>
+                    </div>
+                </div>
+                <div id="inputValue" class="form-group">
                     <label asp-for="InputValue" class="control-label label"></label>
                     <textarea asp-for="InputValue" class="form-control" placeholder="fedd1d1122aa65028c81e16ceb85d9c73790a2fa"></textarea>
                     <span asp-validation-for="InputValue" class="text-danger"></span>
@@ -55,30 +68,30 @@
             </div>
         </div>
     }
-    <div class="col">
-        <div class="text-justify text">
-            @if (Model.OutputValue != null && Model.OutputValue.Item1 != null)
+    <div class="text-justify text">
+        @if (Model.OutputValue != null && Model.OutputValue.Item1 != null)
+        {
+            <div>
+                Your hash was:
+                <b>@Model.OutputValue.Item1</b>
+            </div>
+            <div>
+                Decrypted password:
+                <b>@Model.OutputValue.Item2</b>
+            </div>
+        }
+        else if (Model.OutputValue != null)
+        {
+            if (Model.OutputValue.Item1 == null && Model.OutputValue.Item2 != null)
             {
                 <div>
-                    Your hash was:
-                    <b>@Model.OutputValue.Item1</b>
-                </div>
-                <div>
-                    Decrypted password:
+                    Error occured:
                     <b>@Model.OutputValue.Item2</b>
                 </div>
             }
-            else if (Model.OutputValue != null)
-            {
-                if (Model.OutputValue.Item1 == null && Model.OutputValue.Item2 != null)
-                {
-                    <div>
-                        Error occured:
-                        <b>@Model.OutputValue.Item2</b>
-                    </div>
-                }
 
-            }
-        </div>
+        }
+    </div>
+    <div class="col">
     </div>
 </div>

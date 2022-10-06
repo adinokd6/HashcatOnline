@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using WebHash.DataModels;
 using WebHash.Interfaces;
 using WebHash.IServices;
+using WebHash.Models.ViewModels;
 
 namespace WebHash.Services
 {
@@ -64,6 +66,49 @@ namespace WebHash.Services
 
             }
             return false;
+        }
+
+        public IEnumerable<FileViewModel> GetFiles()
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<Context>();
+                var files = db.Files;
+
+                var filesList = new List<FileViewModel>();
+
+                foreach (var file in files)
+                {
+                    filesList.Add(new FileViewModel()
+                    {
+                        Id = file.Id,
+                        Name = file.Name,
+                    });
+                }
+                return filesList;
+            }
+        }
+
+        public IEnumerable<HashViewModel> GetHashesFromFile(Guid fileId)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<Context>();
+                var file = db.Files.Include(x => x.Hashes).Where(x => x.Id == fileId).FirstOrDefault();
+                    
+
+                var hashesList = new List<HashViewModel>();
+
+                foreach (var hash in file.Hashes.Where(x => string.IsNullOrEmpty(x.Result)))
+                {
+                    hashesList.Add(new HashViewModel()
+                    {
+                        Id = hash.Id,
+                        Hash = hash.OriginalString,
+                    });
+                }
+                return hashesList;
+            }
         }
 
         private async Task<string> GetFilePath(IFormFile file)

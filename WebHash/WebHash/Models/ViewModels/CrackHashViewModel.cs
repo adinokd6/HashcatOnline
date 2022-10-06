@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using static WebHash.Models.Enums.Enums;
 
@@ -6,9 +7,12 @@ namespace WebHash.Models.ViewModels
 {
     public class CrackHashViewModel
     {
-        public static object StandardError { get; internal set; }
         [Display(Name = "Type in your hash to crack")]
         public string InputValue { get; set; }
+
+        public bool HashFromInput { get; set; }
+
+        public Guid HashFromFileId { get; set; }
 
         [Display(Name = "Output value")]
         public Tuple<string, string> OutputValue { get; set; }
@@ -25,7 +29,8 @@ namespace WebHash.Models.ViewModels
         [Display(Name = "Choose second dictionary for this attack method")]
         public string Dictionary2 { get; set; }
 
-        public bool IsCracking { get; set; }
+        public IEnumerable<FileViewModel> Files { get; set; }
+        public IEnumerable<HashViewModel> Hashes { get; set; }
 
     }
 }

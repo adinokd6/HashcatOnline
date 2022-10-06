@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebHash.Interfaces;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebHash.Controllers
 {
@@ -22,20 +25,18 @@ namespace WebHash.Controllers
 
         public IActionResult Index()
         {
-            CrackHashViewModel vm = new CrackHashViewModel();
+            CrackHashViewModel vm = new CrackHashViewModel()
+            {
+                Files = _fileService.GetFiles()
+            };
             return View(vm);
-        }
-
-        [HttpPost]
-        public IActionResult CrackToFile(CrackHashViewModel hash)
-        {
-            return View();
         }
 
         [HttpPost]
         public IActionResult CrackHash(CrackHashViewModel hash)
         {
             _hashService.Decode(hash);
+            hash.Files = _fileService.GetFiles();
 
             return PartialView("Partials/HashForm",hash);
 
@@ -62,7 +63,14 @@ namespace WebHash.Controllers
                 }
             }
 
-            return View(file);
+            return View("../Hack/SendFile", file);
+        }
+
+        [HttpGet]
+        public JsonResult GetHashes(Guid fileId)
+        {
+            var hashes = _fileService.GetHashesFromFile(fileId);
+            return Json(new SelectList(hashes, "Id", "Hash"));
         }
 
 
