@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebHash.DataModels;
 using System.Linq;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace WebHash.Services
 {
@@ -14,11 +15,13 @@ namespace WebHash.Services
     {
         private readonly IStartProgramService _startProgram;
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IFileService _fileService;
 
-        public HashService(IStartProgramService startProgramService, IServiceScopeFactory scopeFactory)
+        public HashService(IStartProgramService startProgramService, IServiceScopeFactory scopeFactory, IFileService fileService)
         {
             _startProgram = startProgramService;
             _scopeFactory = scopeFactory;
+            _fileService = fileService;
         }
 
         public void Decode(CrackHashViewModel hash)
@@ -42,38 +45,43 @@ namespace WebHash.Services
             if (hashCode != string.Empty)
             {
                 Stopwatch stopwatch = new Stopwatch();
-                var command = GetCommandForHashCat(hash.AttackMethod, hash.HashType, hashCode, hash.Dictionary1, hash.Dictionary2);
+
+                var command = GetCommandForHashCat(hash.AttackMethod, hash.HashType, hash.InputValue, hash.Dictionary1, hash.Dictionary2);
 
                 stopwatch.Start();
-                hash.OutputValue = _startProgram.StartDecryptionProcess(command, hashCode);
+                hash.OutputValue = _startProgram.StartDecryptionProcess(command, hash.InputValue); //Zmiana jezeli na wejsciu bedzie slownik
                 stopwatch.Stop();
 
-                var outputValue = hash.OutputValue.Item1.Remove(0, 1); //remo /r becouse it is ouptu with new line from commandline
-
-                if (!hash.HashFromInput && outputValue.Equals(hashCode))
+                if(hash.OutputValue.Item1 != null)
                 {
-                    SaveResultsForHash(hash.HashFromFileId, hash.OutputValue.Item2, stopwatch.Elapsed.TotalSeconds);
+                    var outputValue = hash.OutputValue.Item1.Remove(0, 1); //remo /r becouse it is ouptu with new line from commandline
+                    if (!hash.HashFromInput && outputValue.Equals(hashCode))
+                    {
+                        SaveResultsForHash(hash.HashFromFileId, hash.OutputValue.Item2, hash.HashType, stopwatch.Elapsed.TotalSeconds);
+                    }
                 }
             }
 
         }
 
-        private string GetCommandForHashCat(AttackMethod attackMethod, HashType hashType, string inputValue, string dictionary1, string dictionary2)
+        private string GetCommandForHashCat(AttackMethod attackMethod, HashType hashType, string inputValue, IFormFile dictionary1, IFormFile dictionary2)
         {
+            var dict1Path = _fileService.GetFullFilePath(dictionary1);
+            var dict2Path = _fileService.GetFullFilePath(dictionary2);
             string commandForHashCat = string.Empty;
             switch (attackMethod)
             {
                 case AttackMethod.Combination:
-                    return commandForHashCat = GetAttackMode(attackMethod) + " " + GetHashType(hashType) + " " + inputValue + " " + dictionary1 + " " +dictionary2;
+                    return commandForHashCat = GetAttackMode(attackMethod) + " " + GetHashType(hashType) + " " + inputValue + " " + dict1Path + " " + dict2Path;
                 case AttackMethod.Straight:
-                    return commandForHashCat = GetAttackMode(attackMethod) + " " + GetHashType(hashType) + " " + inputValue + " " + dictionary1;
+                    return commandForHashCat = GetAttackMode(attackMethod) + " " + GetHashType(hashType) + " " + inputValue + " " + dict1Path;
                 default:
                     return commandForHashCat = GetAttackMode(attackMethod) + " " + GetHashType(hashType) + " " + inputValue;
 
             }
         }
 
-        private void SaveResultsForHash(Guid hashId, string result, double time)
+        private void SaveResultsForHash(Guid hashId, string result, HashType hashType, double time)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -81,8 +89,9 @@ namespace WebHash.Services
                 var hashToUpdate = db.Hashes.FirstOrDefault(x => x.Id == hashId);
                 if(hashToUpdate != null)
                 {
-                    hashToUpdate.Result = result; //TODO: wywalic karotki z resulta od stringa c cmd
+                    hashToUpdate.Result = result; // TODO: wywalic karotki z resulta od stringa z cmd
                     hashToUpdate.CrackingTime = Convert.ToInt32(time);
+                    hashToUpdate.HashType = hashType;
                 }
                 db.SaveChanges();
             }

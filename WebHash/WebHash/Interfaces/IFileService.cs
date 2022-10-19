@@ -13,5 +13,7 @@ namespace WebHash.Interfaces
         public IEnumerable<FileViewModel> GetFiles();
 
         public IEnumerable<HashViewModel> GetHashesFromFile(Guid fileId);
+
+        public string GetFullFilePath(IFormFile file);
     }
 }

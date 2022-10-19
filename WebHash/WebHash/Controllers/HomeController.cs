@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace WebHash.Controllers
 {
@@ -32,13 +33,30 @@ namespace WebHash.Controllers
             return View(vm);
         }
 
+
         [HttpPost]
         public IActionResult CrackHash(CrackHashViewModel hash)
         {
-            _hashService.Decode(hash);
-            hash.Files = _fileService.GetFiles();
+            if(hash != null && ModelState.IsValid)
+            {
+                _hashService.Decode(hash);
+                hash.Files = _fileService.GetFiles();
 
-            return PartialView("Partials/HashForm",hash);
+            }
+            else
+            {
+                if(hash == null)
+                {
+                    hash = new CrackHashViewModel();
+                    
+                }
+                hash.Files = _fileService.GetFiles();
+
+
+            }
+            
+
+            return View("Index",hash);
 
         }
 

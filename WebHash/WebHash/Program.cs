@@ -14,6 +14,10 @@ namespace WebHash
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.ConfigureKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = 200000000;
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

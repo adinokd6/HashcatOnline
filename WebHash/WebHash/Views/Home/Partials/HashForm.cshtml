@@ -12,7 +12,8 @@
             </div>
         </div>
     </div>
-    @using (Html.BeginForm("Index", "Home", FormMethod.Get, new { id = "hashForm" }))
+    
+    @using (Html.BeginForm("CrackHash", "Home", FormMethod.Post, new { id = "hashForm", enctype="multipart/form-data" }))
     {
         <div class="col">
             <div style="width: 700px;">
@@ -21,7 +22,7 @@
                     <label asp-for="HashFromInput">Show input for providing hash by your own</label>
                 </div>
                 <div id="fromFileSelect" style="display: none">
-                    <div >
+                    <div>
                         @Html.DropDownList("file",new SelectList(Model.Files, "Id", "Name"), "Select file", new { @class="form-control" })
                     </div>
                     <div class="form-group">
@@ -45,25 +46,21 @@
                     <span asp-validation-for="AttackMethod" class="text-danger"></span>
                 </div>
                 <div id="dict">
-                    @if (Model.AttackMethod == AttackMethod.Straight)
-                    {
+                    <div id="dict1" style="display: none">
                         <div class="form-group">
-                            <label asp-for="Dictionary1" class="control-label label"></label>
-                            <textarea asp-for="Dictionary1" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
-                            <span asp-validation-for="Dictionary1" class="text-danger"></span>
+                            <label asp-for="Dictionary1" class="control-label label">Select dictionary</label>
+                            <input asp-for="Dictionary1" type="file" />
                         </div>
-                    }
-                    else if (Model.AttackMethod == AttackMethod.Combination)
-                    {
+                    </div>
+                    <div id="dict2" style="display: none">
                         <div class="form-group">
-                            <label asp-for="Dictionary2" class="control-label label"></label>
-                            <textarea asp-for="Dictionary2" class="form-control" placeholder="Please provide only absolute path for example C:\Users\UserName\Desktop\file.txt"></textarea>
-                            <span asp-validation-for="Dictionary2" class="text-danger"></span>
+                            <label asp-for="Dictionary2" class="control-label label">Select second dictionary</label>
+                            <input asp-for="Dictionary2" type="file" />
                         </div>
-                    }
+                    </div>
                 </div>
                 <div class="submit" id="btnHashFormSubmit">
-                    <input type="submit" style="margin-top:16px" value="Crack" class="btn btn-primary text-center" id="submitButton">
+                    <button type="submit" style="margin-top:16px"  class="btn btn-primary text-center" id="submitButton">Crack</button>
                 </div>
             </div>
         </div>

@@ -1,13 +1,10 @@
-﻿using WebHash.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using WebHash.Services;
 
 namespace WebHash.IServices
 {
     public interface ICsvService
     {
-        public IEnumerable<string> ImportCsvFile(string fileName);
+        public IEnumerable<CsvLine> ImportCsvFile(string fileName);
     }
 }

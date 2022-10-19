@@ -81,7 +81,7 @@ namespace WebHash.Services
         {
             string[] OutputFromHashCat = output.ToString().Split(' ').ToArray();
 
-            string HashAndDecrypted = OutputFromHashCat.FirstOrDefault(x => x.Contains(hashCode + ":"));
+            string HashAndDecrypted = OutputFromHashCat.Where(x => x.Contains(hashCode + ":")).FirstOrDefault();
             if (HashAndDecrypted != null)
             {
                 OutputFromHashCat = HashAndDecrypted.Split(":");

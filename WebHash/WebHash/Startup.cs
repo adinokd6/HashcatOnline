@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using WebHash.DataModels;
 using WebHash.Services;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace WebHash
 {
@@ -29,6 +31,17 @@ namespace WebHash
             services.AddDbContext<Context>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("WebHashConnection"))
                 );
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = 209715200; //200 Mb max file size
+            });
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = 209715200;
+                options.MultipartBodyLengthLimit = 209715200;
+            });
             #endregion
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
