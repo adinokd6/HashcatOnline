@@ -8,53 +8,15 @@
 @section Scripts {
 <script src="@Url.Content("~/js/Site.js")" asp-append-version="true"></script>
 <script>
-        $(document).ready(function () {
-            $('#hashForm').submit(function (e) {
-                $('#loadingDiv').css('display', 'block');
-                $('#hashForm').css('display','none');
-            });
+     $(document).ready(function () {
+        if($('#AttackMethod').val() === '0'){ 
+            $("#dict1").css('display', 'block');
+        }
 
-        // $('#btnHashFormSubmit').click(function (e) {
-        //     e.preventDefault();
-            
-        //     var mainForm = [0];
-        //     var formData = new FormData();
-
-        //     var dict1 = getFile("Dictionary1");
-        //     var dict2 = getFile("Dictionary2");
-
-        //     if(dict1 != null){
-        //         formData.append("dictionary1",dict1);
-        //     }
-
-        //     if(dict2 != null){
-        //         formData.append("dictionary2",dict2);
-        //     }
-        //     debugger;
-
-
-
-        //     for (var [key, value] of formData.entries()) { 
-        //         console.log(key, value);
-        //     }
-
-        //     $.ajax({
-        //         url: '@Url.Action("CrackHash", "Home")',
-        //         method: "POST",
-        //         data: formData,
-        //         processData: false,
-        //         cache: false,
-        //         contenttype: "multipart/form-data",
-        //         success: function (result) {
-        //             $("#updateForHash").html(result);
-        //             $('#hashForm').css('display','none');
-        //         },
-        //         beforeSend: function(){
-        //             $('#loadingDiv').css('display', 'block');
-        //             $('#hashForm').css('display','none');
-        //         }
-        //     });
-        // });
+        $('#hashForm').submit(function (e) {
+            $('#loadingDiv').css('display', 'block');
+            $('#hashForm').css('display','none');
+        });
 
         $('#HashFromInput').on("change", function(){
             if($('#HashFromInput').is(":checked")){
