@@ -81,9 +81,13 @@ label {
 }
 
 select {
-    transition: 1000ms;
+    transition: 1000ms !important;
 }
 
 textarea{
-    transition: 1000ms;
+    transition: 1000ms !important;
+}
+
+input[type="file"] {
+    display: none;
 }

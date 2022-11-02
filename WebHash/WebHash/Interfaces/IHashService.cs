@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebHash.Models.ViewModels.Analyse;
 
 namespace WebHash.IServices
 {
     public interface IHashService
     {
-        public void Decode(CrackHashViewModel hash);
+        void Decode(CrackHashViewModel hash);
+
+        AnalyseViewModel GetAnalyseData();
     }
 }

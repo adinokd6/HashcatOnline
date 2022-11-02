@@ -1,13 +1,11 @@
 ﻿
 @model WebHash.Models.ViewModels.SendFileViewModel
 
-<h1>AddFileForm</h1>
-
 <div>
     @using (Html.BeginForm("SendFile", "Home", FormMethod.Post, new { id = "csvForm", enctype="multipart/form-data" }))
     {
         <div class="form-group">
-            <label asp-for="UploadedFile" class="control-label label">Select file</label>
+            <label asp-for="UploadedFile" class="btn btn-primary text-center control-label label">Select file</label>
             <input type="file" asp-for="UploadedFile" />
         </div>
         <div class="form-group">

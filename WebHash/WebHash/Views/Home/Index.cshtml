@@ -1,8 +1,13 @@
-﻿@model WebHash.Models.ViewModels.CrackHashViewModel
+﻿@model WebHash.Models.ViewModels.MainWindowViewModel
 
 <div>
     <div class="row" style="margin-left: 10px;">
-        @Html.Partial("Partials/HashForm", Model)
+        <div id="updateForHash">
+            @Html.Partial("Partials/_HashForm", Model.CrackHash)
+        </div>
+        <div class="col">
+            @Html.Partial("Partials/_SendFile", Model.SendFile)
+        </div>
     </div>
 </div>
 @section Scripts {

@@ -1,0 +1,57 @@
+﻿@using Newtonsoft.Json
+@model WebHash.Models.ViewModels.Analyse.AnalyseViewModel
+
+<div class="row" style="margin-bottom: 200px;">
+    <div class="col">
+        <div style="width: 500px; height: 400px; margin-left: auto; margin-right: auto;">
+            <canvas id="numberOfHashTypeChart" width=100 height=100></canvas>
+        </div>
+    </div>
+    <div class="col">
+        <div style="width: 500px; height: 400px; margin-left: auto; margin-right: auto;">
+            <canvas id="averageTimeDehashChart" width=100 height=100></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('numberOfHashTypeChart').getContext('2d');
+    const ctx1 = document.getElementById('averageTimeDehashChart').getContext('2d');
+
+
+    const numberOfHashTypeChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: @Html.Raw(JsonConvert.SerializeObject(Model.HashTypes)),
+            datasets: [{
+                label: '# of Votes',
+                data: @Html.Raw(JsonConvert.SerializeObject(Model.HashNumbers)),
+                backgroundColor: @Html.Raw(JsonConvert.SerializeObject(Model.BackgroundColor)),
+                borderColor: @Html.Raw(JsonConvert.SerializeObject(Model.BorderColor)),
+                borderWidth: 1
+            }]
+        }
+    });
+
+    const averageTimeDehashChart = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+        labels: @Html.Raw(JsonConvert.SerializeObject(Model.HashTypes)),
+        datasets: [{
+            label: 'Average dehash time of specific hash type in seconds',
+            data: @Html.Raw(JsonConvert.SerializeObject(Model.AverageDehashTime)),
+            backgroundColor: @Html.Raw(JsonConvert.SerializeObject(Model.BackgroundColor)),
+            borderColor: @Html.Raw(JsonConvert.SerializeObject(Model.BorderColor)),
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+</script>

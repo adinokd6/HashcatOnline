@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using CsvHelper;
 using WebHash.IServices;
 
@@ -27,7 +28,7 @@ namespace WebHash.Services
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
                             var hashes = csv.GetRecords<CsvLine>();
-                            return hashes;
+                            return hashes.Where(x => x.Hash != null).ToList();
                         }
                     }
                     catch (Exception ex)

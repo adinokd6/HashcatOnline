@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
+using WebHash.Models.ViewModels.Analyse;
 
 namespace WebHash.Controllers
 {
@@ -26,9 +27,14 @@ namespace WebHash.Controllers
 
         public IActionResult Index()
         {
-            CrackHashViewModel vm = new CrackHashViewModel()
+            var files = _fileService.GetFiles();
+            MainWindowViewModel vm = new MainWindowViewModel()
             {
-                Files = _fileService.GetFiles()
+                CrackHash = new CrackHashViewModel()
+                {
+                    Files = files
+                },
+                SendFile = new SendFileViewModel()
             };
             return View(vm);
         }
@@ -54,17 +60,15 @@ namespace WebHash.Controllers
 
 
             }
-            
 
-            return View("Index",hash);
+            var model = new MainWindowViewModel()
+            {
+                CrackHash = hash,
+                SendFile = new SendFileViewModel()
+            };
 
-        }
+            return View("Index",model);
 
-        [HttpGet]
-        public IActionResult SendFile()
-        {
-            var vm = new SendFileViewModel();
-            return View("../Hack/SendFile",vm);
         }
 
         [HttpPost]
@@ -81,7 +85,7 @@ namespace WebHash.Controllers
                 }
             }
 
-            return View("../Hack/SendFile", file);
+            return PartialView("../Home/Partials/_SendFile", file);
         }
 
         [HttpGet]
@@ -89,6 +93,13 @@ namespace WebHash.Controllers
         {
             var hashes = _fileService.GetHashesFromFile(fileId);
             return Json(new SelectList(hashes, "Id", "Hash"));
+        }
+
+        [HttpGet]
+        public IActionResult Analyse()
+        {
+            var model = _hashService.GetAnalyseData();
+            return View("../Analyse/Index", model);
         }
 
 
