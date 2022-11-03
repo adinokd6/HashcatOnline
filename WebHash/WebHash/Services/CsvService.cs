@@ -28,12 +28,12 @@ namespace WebHash.Services
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
                             var hashes = csv.GetRecords<CsvLine>();
-                            return hashes.Where(x => x.Hash != null).ToList();
+                            return hashes.Count() > 0 ? hashes.Where(x => x.Hash != null).ToList() : null;
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message); // TODO: dorobic prawidlowego exceptiona. Ale to juz zrobic globalnie te eventy
+                        Console.WriteLine(ex.Message);
                     }
                 }
             }

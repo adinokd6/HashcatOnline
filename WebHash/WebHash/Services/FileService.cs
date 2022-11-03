@@ -20,7 +20,7 @@ namespace WebHash.Services
     {
         public ICsvService _csvService;
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IWebHostEnvironment _environment; //TODO: zmienilem typ serwisu. Zobaczyc czy dalej bedzie czytalo dobrze pliki
+        private readonly IWebHostEnvironment _environment;
         private readonly string _rootPath = "wwwroot\\tmp";
 
         public FileService(ICsvService csvService, IServiceScopeFactory scopeFactory, IWebHostEnvironment environment)

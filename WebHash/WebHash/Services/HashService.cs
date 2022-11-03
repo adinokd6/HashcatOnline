@@ -63,7 +63,7 @@ namespace WebHash.Services
 
 
 
-            if (hashCode != string.Empty)
+            if (!string.IsNullOrEmpty(hashCode))
             {
                 Stopwatch stopwatch = new Stopwatch();
 

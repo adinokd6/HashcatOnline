@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebHash.Interfaces;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
-using WebHash.Models.ViewModels.Analyse;
 
 namespace WebHash.Controllers
 {
@@ -28,14 +25,7 @@ namespace WebHash.Controllers
         public IActionResult Index()
         {
             var files = _fileService.GetFiles();
-            MainWindowViewModel vm = new MainWindowViewModel()
-            {
-                CrackHash = new CrackHashViewModel()
-                {
-                    Files = files
-                },
-                SendFile = new SendFileViewModel()
-            };
+            var vm = GetNewMainViewModel();
             return View(vm);
         }
 
@@ -81,11 +71,15 @@ namespace WebHash.Controllers
                 
                 if(!result)
                 {
-                    ModelState.AddModelError("Error: ", " there is some error with your file. Please check it before next upload.");
+                    ModelState.AddModelError("FileError", "There is some error with your file. Please check it before next upload.");
                 }
             }
 
-            return PartialView("../Home/Partials/_SendFile", file);
+            var vm = GetNewMainViewModel();
+
+            vm.SendFile= file;
+
+            return View("Index", vm);
         }
 
         [HttpGet]
@@ -100,6 +94,21 @@ namespace WebHash.Controllers
         {
             var model = _hashService.GetAnalyseData();
             return View("../Analyse/Index", model);
+        }
+
+        private MainWindowViewModel GetNewMainViewModel()
+        {
+            var files = _fileService.GetFiles();
+            MainWindowViewModel vm = new MainWindowViewModel()
+            {
+                CrackHash = new CrackHashViewModel()
+                {
+                    Files = files
+                },
+                SendFile = new SendFileViewModel()
+            };
+
+            return vm;
         }
 
 
