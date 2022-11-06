@@ -21,13 +21,15 @@ namespace WebHash.Services
         public ICsvService _csvService;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IWebHostEnvironment _environment;
+        private readonly ILoggerService _loggerService;
         private readonly string _rootPath = "wwwroot\\tmp";
 
-        public FileService(ICsvService csvService, IServiceScopeFactory scopeFactory, IWebHostEnvironment environment)
+        public FileService(ICsvService csvService, IServiceScopeFactory scopeFactory, IWebHostEnvironment environment, ILoggerService logger)
         {
             _csvService = csvService;
             _scopeFactory = scopeFactory;
             _environment = environment;
+            _loggerService = logger;
         }
 
         public async Task<bool> ImportFile(IFormFile uploadedFile, string fileName)
@@ -51,6 +53,7 @@ namespace WebHash.Services
 
                     if (db.Files.Any(x => x.Name == fileName))
                     {
+                        _loggerService.Information("Attempt to import file without providing File name");
                         return false;
                     }
 
@@ -59,16 +62,16 @@ namespace WebHash.Services
                     var listOfHashes = GetListOfHashes(readedHashes);
                     if (!listOfHashes.Any())
                     {
+                        _loggerService.Information("Attempt to import empty file. File name: " + fileName);
                         return false;
                     }
 
                     newFile.Hashes = listOfHashes;
                     db.Add(newFile);
                     db.SaveChanges();
+                    _loggerService.Information("New file has been added. File name: " + fileName);
+                    return true;
                 }
-
-
-
             }
             return false;
         }
@@ -82,7 +85,7 @@ namespace WebHash.Services
 
                 var filesList = new List<FileViewModel>();
 
-                foreach (var file in files)
+                foreach (var file in files.Where(x => x.Hashes.Count > 0))
                 {
                     filesList.Add(new FileViewModel()
                     {
@@ -100,6 +103,11 @@ namespace WebHash.Services
             {
                 var db = scope.ServiceProvider.GetRequiredService<Context>();
                 var file = db.Files.Include(x => x.Hashes).Where(x => x.Id == fileId).FirstOrDefault();
+
+                if(file == null || file.Hashes.Count == 0)
+                {
+                    return null;
+                }
 
                 //Dodac wyjatek jezeli plik jest pusty albo nei zawiera hashy. najlepiej zablokowac
                 //mozliwosc dodawania pustych plikow ale tutaj tez warto dodac taka blokade
@@ -129,7 +137,57 @@ namespace WebHash.Services
                 return "\"" + filePath + "\"";
             }
             return String.Empty;
+        }
 
+        public IEnumerable<FileViewModel> GetAllFiles()
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<Context>();
+                var files = db.Files;
+
+                var filesList = new List<FileViewModel>();
+
+                foreach (var file in files)
+                {
+                    filesList.Add(new FileViewModel()
+                    {
+                        Id = file.Id,
+                        Name = file.Name,
+                    });
+                }
+                return filesList;
+            }
+        }
+
+        public bool IsFileExists(Guid id)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<Context>();
+                var files = db.Files;
+                var fileTodelete = files.Where(x => x.Id == id).FirstOrDefault();
+                if (fileTodelete != null)
+                    return true;
+                return false;
+            }
+        }
+
+        public void DeleteFile(Guid id)
+        {
+            using (var scope = _scopeFactory.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<Context>();
+                var files = db.Files;
+                var fileTodelete = files.Where(x => x.Id == id).Include(y => y.Hashes).FirstOrDefault();
+
+                if (fileTodelete != null)
+                {
+                    db.Files.Remove(fileTodelete);
+                }
+
+                db.SaveChanges();
+            }
         }
 
         private async Task<string> GetFilePath(IFormFile file)

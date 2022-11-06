@@ -8,12 +8,16 @@ namespace WebHash.Interfaces
 {
     public interface IFileService
     {
-        public Task<bool> ImportFile(IFormFile uploadedFile, string fileName);
+        Task<bool> ImportFile(IFormFile uploadedFile, string fileName);
 
-        public IEnumerable<FileViewModel> GetFiles();
+        IEnumerable<FileViewModel> GetFiles();
+        IEnumerable<FileViewModel> GetAllFiles();
+        bool IsFileExists(Guid id);
 
-        public IEnumerable<HashViewModel> GetHashesFromFile(Guid fileId);
+        IEnumerable<HashViewModel> GetHashesFromFile(Guid fileId);
 
-        public string GetFullFilePath(IFormFile file);
+        string GetFullFilePath(IFormFile file);
+
+        void DeleteFile(Guid id);
     }
 }

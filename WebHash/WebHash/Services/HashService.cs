@@ -73,7 +73,7 @@ namespace WebHash.Services
                 hash.OutputValue = _startProgram.StartDecryptionProcess(command, hashCode); //Zmiana jezeli na wejsciu bedzie slownik
                 stopwatch.Stop();
 
-                if(hash.OutputValue.Item1 != null)
+                if(hash.OutputValue.Item1 != null && !string.IsNullOrEmpty(hash.OutputValue.Item1))
                 {
                     var outputValue = hash.OutputValue.Item1.Remove(0, 1); //remo /r becouse it is ouptu with new line from commandline
                     if (!hash.HashFromInput && outputValue.Equals(hashCode))

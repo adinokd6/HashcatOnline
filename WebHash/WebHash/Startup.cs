@@ -52,6 +52,7 @@ namespace WebHash
             services.AddSingleton<IStartProgramService, StartProgramService>();
             services.AddSingleton<ICsvService, CsvService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddSingleton<ILoggerService, LoggerService>();
 
             services.AddHttpClient();
 

@@ -1,0 +1,18 @@
+﻿@model WebHash.Models.ViewModels.DeleteFileViewModel
+
+<div>
+    @using (Html.BeginForm("DeleteFile", "Home", FormMethod.Post, new { id = "deleteForm" }))
+    {
+        @Html.HiddenFor(m=>m.Id)
+        <div id="deleteFile">
+            <div>
+                @Html.DropDownList("selectDeleteFile",new SelectList(Model.Files, "Id", "Name"), "Select file", new { @class="form-control" })
+                @Html.ValidationMessage("FileDoesntExist")
+            </div>
+            <div class="submit" id="btnDeleteFile">
+                <input type="submit" style="margin-top:16px" value="Delete selected file" class="btn btn-primary text-center">
+            </div>
+        </div>
+    }
+</div>
+

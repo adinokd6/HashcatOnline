@@ -7,6 +7,7 @@
         </div>
         <div class="col">
             @Html.Partial("Partials/_SendFile", Model.SendFile)
+            @Html.Partial("Partials/_DeleteFile", Model.DeleteFile)
         </div>
     </div>
 </div>
@@ -55,16 +56,11 @@
                 type: "GET",
                 data: { "fileId": $("#file").val() },
                 success: function (result) {
-                    var items = '';
-                    var first = true;
-                    $(result).each(function(){
-                        if(first){
-                        items += "<option selected='selected' value=" + this.value + ">" + this.text + "</option>";
-                        first = false;
-                        }
-                        items += "<option value=" + this.value + ">" + this.text + "</option>";
-                    })
-                    $("#HashFromFileId").html(items);
+                    if(result.isEmpty != undefined && result.isEmpty != true){
+
+                        var items = createSelect(result.hashes);
+                        $("#HashFromFileId").html(items);
+                    }
                 },
                 error: function(result){
                     alert(result.responseText)
@@ -72,14 +68,54 @@
             });
         });
 
+        $('#btnDeleteFile').on("click",function () {
+            var test = $("#selectDeleteFile").val();
+            $.ajax({
+                url: '@Url.Action("DeleteFile", "Home")',
+                type: "POST",
+                data: { "id": $("#selectDeleteFile").val() },
+                success: function (result) {
+                    if(result.isDeleted != undefined && result.isDeleted == true){
+                        console.log(result.message)
+                    }
+                    else if(result.isDeleted != undefined && result.isDeleted == false && result.message != undefined && result.message != null){
+                        alert("File doesnt exists")
+                    }
+                    else{
+                        alert("Error")
+                    }
+                },
+                error: function(result){
+                    alert(result.responseText)
+                }
+            });
+        });
+
+        $('#selectDeleteFile').on("change",function () {
+            $("#Id").val($(this).val());
+        });
+
+
         function getFile(id){
-            debugger;
             var element = $('#'+id);
             if(element != null && element != undefined){
                 var file = element[0].files[0];
 
                 return file != null && file != undefined ? file : null;
             }
+        }
+
+        function createSelect(result){
+            var items = '';
+            var first = true;
+            $(result).each(function(){
+                if(first){
+                items += "<option selected='selected' value=" + this.value + ">" + this.text + "</option>";
+                first = false;
+                }
+                items += "<option value=" + this.value + ">" + this.text + "</option>";
+            })
+            return items;
         }
 
     });

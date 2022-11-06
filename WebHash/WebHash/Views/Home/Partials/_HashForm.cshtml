@@ -24,6 +24,7 @@
             <div id="fromFileSelect" style="display: none">
                 <div>
                     @Html.DropDownList("file",new SelectList(Model.Files, "Id", "Name"), "Select file", new { @class="form-control" })
+                    @Html.ValidationMessage("EmptyFileList")
                 </div>
                 <div class="form-group">
                     <label asp-for="HashFromFileId" class="control-label label">Select hash you want to crack</label>
