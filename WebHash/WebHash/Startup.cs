@@ -53,6 +53,7 @@ namespace WebHash
             services.AddSingleton<ICsvService, CsvService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<ILoggerService, LoggerService>();
+            services.AddSingleton<IAnalyseService, AnalyseService>();
 
             services.AddHttpClient();
 

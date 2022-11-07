@@ -2,9 +2,9 @@
 
 namespace WebHash.CustomExceptions
 {
-    public class CsvErrorException : Exception
+    public class FileNotFoundException : Exception
     {
-        public CsvErrorException(string message)
+        public FileNotFoundException(string message)
                 : base(message)
         {
         }

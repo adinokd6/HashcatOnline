@@ -1,8 +1,7 @@
-﻿
-@model WebHash.Models.ViewModels.SendFileViewModel
+﻿@model WebHash.Models.ViewModels.SendFileViewModel
 
 <div>
-    @using (Html.BeginForm("SendFile", "Home", FormMethod.Post, new { id = "csvForm", enctype="multipart/form-data" }))
+    @using (Html.BeginForm("SendFile", "Home", FormMethod.Post, new { id = "csvForm", enctype = "multipart/form-data" }))
     {
         <div class="form-group">
             <label asp-for="UploadedFile" class="btn btn-primary text-center control-label label">Select file</label>
@@ -12,7 +11,9 @@
         <div class="form-group">
             <label asp-for="FileName" class="control-label label"></label>
             <textarea asp-for="FileName" class="form-control"></textarea>
-            @Html.ValidationMessageFor(x => x.FileName)
+            <div style="margin-top: 30px; color: red; font-weight: bold;">
+                @Html.ValidationMessageFor(x => x.FileName)
+            </div>
         </div>
         <div class="submit" id="btnSubmit">
             <input type="submit" style="margin-top:16px" value="Upload" class="btn btn-primary text-center">

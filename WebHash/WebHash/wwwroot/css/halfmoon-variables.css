@@ -165,7 +165,7 @@ CSS variables (CSS custom properties)
         dark themes.
     */
 
-    --dark-color: #191c20;
+    --dark-color: #191c20 !important;
     --dark-color-light: #25282c;
     --dark-color-dark: #111417;
 
@@ -195,7 +195,7 @@ CSS variables (CSS custom properties)
     --lm-horizontal-rule-color: rgba(0, 0, 0, 0.05);
     --lm-border-color: rgba(0, 0, 0, 0.2); /* Only used for border utilities */
 
-    --dm-base-text-color: rgba(255, 255, 255, 0.8);
+    --dm-base-text-color: rgba(255, 255, 255, 0.8) !important;
     --dm-base-text-color-light: rgba(255, 255, 255, 0.65);
     --dm-base-body-bg-color: var(--dark-color-light);
     --dm-base-body-bg-image: none;
@@ -659,7 +659,7 @@ CSS variables (CSS custom properties)
     --lm-card-border-color: rgba(0, 0, 0, 0.2);
     --lm-card-box-shadow: none;
 
-    --dm-card-text-color: var(--dm-base-text-color);
+    --dm-card-text-color: var(--dm-base-text-color) !important;
     --dm-card-bg-color: var(--dark-color);
     --dm-card-bg-image: none;
     --dm-card-border-color: rgba(0, 0, 0, 0.2);
@@ -2656,7 +2656,7 @@ body {
 .dark-mode {
     background-color: var(--dm-base-body-bg-color);
     background-image: var(--dm-base-body-bg-image);
-    color: var(--dm-base-text-color);
+    color: var(--dm-base-text-color) !important;
     /*
     Anti-aliasing works best on light fonts on dark backgrounds. Otherwise, 
     there is a loss of readability. 

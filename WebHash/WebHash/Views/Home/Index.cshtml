@@ -1,11 +1,11 @@
 ﻿@model WebHash.Models.ViewModels.MainWindowViewModel
 
 <div>
-    <div class="row" style="margin-left: 10px;">
-        <div id="updateForHash">
+    <div class="row-for-column" style="margin-left: 10px;">
+        <div class="column" id="updateForHash">
             @Html.Partial("Partials/_HashForm", Model.CrackHash)
         </div>
-        <div class="col">
+        <div class="column" style="padding-left: 100px;">
             @Html.Partial("Partials/_SendFile", Model.SendFile)
             @Html.Partial("Partials/_DeleteFile", Model.DeleteFile)
         </div>

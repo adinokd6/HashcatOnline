@@ -287,7 +287,7 @@ body {
 .dark-mode {
     background-color: #25282c;
     background-image: none;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.8) !important;
     /*
     Anti-aliasing works best on light fonts on dark backgrounds. Otherwise, 
     there is a loss of readability. 
@@ -2730,7 +2730,7 @@ body {
     box-shadow: none;
 }
 .dark-mode .card {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.8) !important;
     background-color: #191c20;
     background-image: none;
     border-color: rgba(0, 0, 0, 0.2);
@@ -4565,7 +4565,7 @@ kbd {
 /* Dark mode */
 
 .dark-mode .table tbody tr.table-primary {
-    color: #1890ff;
+    color: #1890ff !important;
     background-color: #172636;
     border-color: #0d518f;
 }

@@ -15,9 +15,13 @@ namespace WebHash.Services
             logsPathName = logPathName == null ? AppDomain.CurrentDomain.BaseDirectory + "logs.txt" : logPathName;
         }
 
-        public string GetLogsInformation()
+        public List<string> GetLogsInformation()
         {
-            var allLogs = File.ReadAllText(logsPathName);
+            var allLogs = new List<string>();
+            foreach (string line in System.IO.File.ReadLines(logsPathName))
+            {
+                allLogs.Add(line);
+            }
             return allLogs;
         }
 

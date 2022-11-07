@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebHash_Tests
 {
-    internal class HashServiceTests
+    public class HashServiceTests
     {
     }
 }

@@ -11,17 +11,17 @@ namespace WebHash.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IHashService _hashService;
+        private readonly IAnalyseService _analyseService;
         private readonly IFileService _fileService;
         private readonly ILoggerService _loggerService;
 
-        public HomeController(ILogger<HomeController> logger, IHashService hashService, IFileService fileService, ILoggerService loggerService)
+        public HomeController(IHashService hashService, IFileService fileService, ILoggerService loggerService, IAnalyseService analyseService)
         {
-            _logger = logger;
             _hashService = hashService;
             _fileService = fileService;
             _loggerService = loggerService;
+            _analyseService = analyseService;
         }
 
         public IActionResult Index()
@@ -53,11 +53,8 @@ namespace WebHash.Controllers
 
             }
 
-            var model = new MainWindowViewModel()
-            {
-                CrackHash = hash,
-                SendFile = new SendFileViewModel()
-            };
+            var model = GetNewMainViewModel();
+            model.CrackHash = hash;
 
             return View("Index", model);
 
@@ -120,7 +117,7 @@ namespace WebHash.Controllers
         [HttpGet]
         public IActionResult Analyse()
         {
-            var model = _hashService.GetAnalyseData();
+            var model = _analyseService.GetAnalyseData();
             return View("../Analyse/Index", model);
         }
 
@@ -131,6 +128,32 @@ namespace WebHash.Controllers
 
             model.Logs = _loggerService.GetLogsInformation();
             return View("../Logs/Index", model);
+        }
+
+        [HttpGet]
+        public IActionResult FileInfo(FileInfoViewModel viewModel)
+        {
+            if (viewModel.Id == Guid.Empty && viewModel.FilesForSelect == null && viewModel.FileDetails == null)
+            {
+                var model = new FileInfoViewModel();
+                model.FilesForSelect = _analyseService.GetAllFiles();
+                return View("../FileInfo/Index", model);
+            }
+            else
+            {
+                var fileDetails = _analyseService.GetDetailsForFile(viewModel.Id);
+                viewModel.FilesForSelect = _analyseService.GetAllFiles();
+                if (fileDetails != null)
+                {
+                    viewModel.FileDetails = fileDetails;
+                    return View("../FileInfo/Index", viewModel);
+                }
+                ModelState.AddModelError("FileError", "File not found. Try again later.");
+                return View("../FileInfo/Index", viewModel);
+            }
+
+
+            
         }
 
         private MainWindowViewModel GetNewMainViewModel()

@@ -10,7 +10,5 @@ namespace WebHash.IServices
     public interface IHashService
     {
         void Decode(CrackHashViewModel hash);
-
-        AnalyseViewModel GetAnalyseData();
     }
 }

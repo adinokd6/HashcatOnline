@@ -18,25 +18,6 @@ namespace WebHash.Services
         private readonly IStartProgramService _startProgram;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IFileService _fileService;
-        private readonly List<string> _backgroundColors = new List<string>()
-        {
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)"
-        };
-
-        private readonly List<string> _borderColors = new List<string>()
-        {
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)"
-        };
 
         public HashService(IStartProgramService startProgramService, IServiceScopeFactory scopeFactory, IFileService fileService)
         {
@@ -83,47 +64,6 @@ namespace WebHash.Services
                 }
             }
 
-        }
-
-        public AnalyseViewModel GetAnalyseData()
-        {
-            using (var scope = _scopeFactory.CreateScope())
-            {
-                var model = new AnalyseViewModel()
-                {
-                    HashTypes = new List<string>(),
-                    HashNumbers = new List<int>(),
-                    AverageDehashTime = new List<double>(),
-                    BackgroundColor = new List<string>(),
-                    BorderColor = new List<string>(),
-                };
-
-                var db = scope.ServiceProvider.GetRequiredService<Context>();
-
-                var groupedHash = db.Hashes.AsEnumerable().GroupBy(x => x.HashType).OrderByDescending(g => g.Count()).ToList().Take(4);
-
-                int i = 0;
-                foreach(var hash in groupedHash)
-                {
-                    model.HashTypes.Add(hash.Key.ToString());
-                    model.HashNumbers.Add(hash.Count());
-                    model.AverageDehashTime.Add(CountAverageDehashTime(hash));
-                    model.BackgroundColor.Add(_backgroundColors.ElementAt(i));
-                    model.BorderColor.Add(_borderColors.ElementAt(i));
-                    i++;
-                }
-
-                return model;
-
-            }
-
-        }
-
-        private double CountAverageDehashTime(IGrouping<HashType,Hash> hashGroup)
-        {
-            var crackingTimeList = hashGroup.Select(x => x.CrackingTime);
-
-            return Queryable.Average(crackingTimeList.AsQueryable());
         }
 
         private string GetCommandForHashCat(AttackMethod attackMethod, HashType hashType, string inputValue, IFormFile dictionary1, IFormFile dictionary2)

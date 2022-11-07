@@ -1,0 +1,60 @@
+﻿@model WebHash.Models.ViewModels.FileInfoViewModel
+
+
+<div style="padding: 20px 15px 0px 15px;">
+    @using (Html.BeginForm("FileInfo", "Home", FormMethod.Get, new { id = "fileInfo" }))
+    {
+        <div>
+            <div id="fromFileSelect" style="width: 100%;">
+                <div style="width: 300px; float: left">
+                    @Html.DropDownListFor(x => x.Id, new SelectList(Model.FilesForSelect, "Id", "Name"), "Select file", new { @class="form-control" })
+                    @Html.ValidationMessage("FileError")
+                </div>
+            </div>
+            <div class="submit" id="btnHashFormSubmit" style="float: left; margin-left: 30px; margin-bottom: 30px;">
+                <button type="submit" class="btn btn-primary text-center" id="submitButton">Show</button>
+            </div>
+        </div>
+        @if (Model.FileDetails != null)
+        {
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Original string</th>
+                            <th>Is decrypted?</th>
+                            <th>Result</th>
+                            <th>Cracking time</th>
+                            <th>Hash type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int i = 0;
+                        }
+                        @foreach (var hash in Model.FileDetails.HashesDetails)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@hash.OriginalString</td>
+                                <td>@hash.IsDecrypted</td>
+                                <td>@(hash.Result != null ? hash.Result : "")</td>
+                                <td>@hash.CrackingTime</td>
+                                <td>@hash.HashType</td>
+                            </tr>
+                            { i++; }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    }
+</div>
+
+<style>
+    .dark-mode .table{
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+</style>

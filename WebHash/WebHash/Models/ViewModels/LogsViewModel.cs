@@ -1,7 +1,9 @@
-﻿namespace WebHash.Models.ViewModels
+﻿using System.Collections.Generic;
+
+namespace WebHash.Models.ViewModels
 {
     public class LogsViewModel
     {
-        public string Logs { get; set; }
+        public List<string> Logs { get; set; }
     }
 }
