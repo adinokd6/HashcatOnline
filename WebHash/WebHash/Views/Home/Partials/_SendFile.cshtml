@@ -9,7 +9,7 @@
             @Html.ValidationMessageFor(x => x.UploadedFile)
         </div>
         <div class="form-group">
-            <label asp-for="FileName" class="control-label label"></label>
+            <label asp-for="FileName" class="control-label label">Type in custom file name for your file:</label>
             <textarea asp-for="FileName" class="form-control"></textarea>
             <div style="margin-top: 30px; color: red; font-weight: bold;">
                 @Html.ValidationMessageFor(x => x.FileName)

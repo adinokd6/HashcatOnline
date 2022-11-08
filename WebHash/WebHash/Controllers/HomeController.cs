@@ -35,44 +35,61 @@ namespace WebHash.Controllers
         [HttpPost]
         public IActionResult CrackHash(CrackHashViewModel hash)
         {
-            if (hash != null && ModelState.IsValid)
+            try
             {
-                _hashService.Decode(hash);
-                hash.Files = _fileService.GetFiles();
-
-            }
-            else
-            {
-                if (hash == null)
+                if (hash != null && ModelState.IsValid)
                 {
-                    hash = new CrackHashViewModel();
+                    _hashService.Decode(hash);
+                    hash.Files = _fileService.GetFiles();
 
                 }
-                hash.Files = _fileService.GetFiles();
+                else
+                {
+                    if (hash == null)
+                    {
+                        hash = new CrackHashViewModel();
+
+                    }
+                    hash.Files = _fileService.GetFiles();
 
 
+                }
+
+                var model = GetNewMainViewModel();
+                model.CrackHash = hash;
+
+                return View("Index", model);
+            }
+            catch
+            {
+                TempData["Error"] = true;
+                return RedirectToAction("Index");
             }
 
-            var model = GetNewMainViewModel();
-            model.CrackHash = hash;
-
-            return View("Index", model);
 
         }
 
         [HttpPost]
         public async Task<IActionResult> SendFile(SendFileViewModel file)
         {
-
-            if (ModelState.IsValid)
+            try
             {
-                var result = await _fileService.ImportFile(file.UploadedFile, file.FileName);
-
-                if (!result)
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError("FileError", "There is some error with your file. Please check it before next upload.");
+                    var result = await _fileService.ImportFile(file.UploadedFile, file.FileName);
+
+                    if (!result)
+                    {
+                        ModelState.AddModelError("FileError", "There is some error with your file. Please check it before next upload.");
+                    }
                 }
             }
+            catch
+            {
+                TempData["Error"] = true;
+                return RedirectToAction("Index");
+            }
+
 
             var vm = GetNewMainViewModel();
 
@@ -105,7 +122,7 @@ namespace WebHash.Controllers
         [HttpGet]
         public JsonResult GetHashes(Guid fileId)
         {
-            var hashes = _fileService.GetHashesFromFile(fileId); //TODO: Tylko import plikow ktore nie sa empty. Wewnatrz serwisu zrobic
+            var hashes = _fileService.GetHashesFromFile(fileId);
             if (hashes == null)
             {
                 ModelState.AddModelError("EmptyFileList", "File list is empty. Upload some files to database.");

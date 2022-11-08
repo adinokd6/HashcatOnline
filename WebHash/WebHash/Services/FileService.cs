@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebHash.DataModels;
 using WebHash.Interfaces;
@@ -109,8 +108,6 @@ namespace WebHash.Services
                     return null;
                 }
 
-                //Dodac wyjatek jezeli plik jest pusty albo nei zawiera hashy. najlepiej zablokowac
-                //mozliwosc dodawania pustych plikow ale tutaj tez warto dodac taka blokade
                 var hashesList = new List<HashViewModel>();
 
                 foreach (var hash in file.Hashes.Where(x => string.IsNullOrEmpty(x.Result)))
@@ -219,12 +216,13 @@ namespace WebHash.Services
             foreach (var hash in readedHashes)
             {
                 HashType hashType;
-                if (Enum.TryParse<HashType>(hash.HashType, out hashType))
+                if (Enum.TryParse(hash.HashType, out hashType))
                 {
                     hashes.Add(new Hash()
                     {
                         OriginalString = hash.Hash,
-                        HashType = hashType
+                        HashType = hashType,
+                        Name = hash.HashName
                     });
                 }
             }

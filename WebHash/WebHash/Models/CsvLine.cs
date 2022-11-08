@@ -6,5 +6,6 @@ namespace WebHash.Services
     {
         public string Hash { get; set; }
         public string HashType { get; set; }
+        public string HashName { get; set; }
     }
 }

@@ -29,6 +29,8 @@ a {
 -------------------------------------------------- */
 html {
   font-size: 14px;
+  min-height: 100%;
+  position: relative;
 }
 @media (min-width: 768px) {
   html {
@@ -65,11 +67,12 @@ body {
     transition: 1000ms;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+    height: 60px;
 }
 
 input {
@@ -109,4 +112,13 @@ input[type="file"] {
     .column {
         width: 100%;
     }
+}
+
+.modal{
+    display: unset !important;
+}
+
+.modal-dialog{
+    max-width: unset !important;
+    margin: unset !important;
 }
