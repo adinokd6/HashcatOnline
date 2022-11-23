@@ -5,6 +5,6 @@ namespace WebHash.IServices
 {
     public interface ICsvService
     {
-        public IEnumerable<CsvLine> ImportCsvFile(string fileName);
+        public IEnumerable<CsvHash> ImportCsvFile(string fileName);
     }
 }

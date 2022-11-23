@@ -136,10 +136,12 @@
             var first = true;
             $(result).each(function(){
                 if(first){
-                items += "<option selected='selected' value=" + this.value + ">" + this.text + "</option>";
-                first = false;
+                    items += "<option selected='selected' value=" + this.value + ">" + this.text + "</option>";
+                    first = false;
                 }
-                items += "<option value=" + this.value + ">" + this.text + "</option>";
+                else{
+                    items += "<option value=" + this.value + ">" + this.text + "</option>";
+                }
             })
             return items;
         }

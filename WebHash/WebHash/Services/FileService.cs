@@ -42,7 +42,6 @@ namespace WebHash.Services
                 {
                     Name = fileName,
                     Date = DateTime.Now,
-                    IsDeleted = false
                 };
 
 
@@ -205,7 +204,7 @@ namespace WebHash.Services
             }
         }
 
-        private List<Hash> GetListOfHashes(IEnumerable<CsvLine> readedHashes)
+        private List<Hash> GetListOfHashes(IEnumerable<CsvHash> readedHashes)
         {
             if (readedHashes == null)
             {

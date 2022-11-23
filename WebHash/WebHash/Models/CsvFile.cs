@@ -6,7 +6,5 @@ namespace WebHash.Models
     {
         public string FileName { get; set; }
 
-        public IEnumerable<string> Hashes { get; set; }
-
     }
 }

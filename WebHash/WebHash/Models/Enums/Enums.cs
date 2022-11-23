@@ -19,7 +19,7 @@ namespace WebHash.Models.Enums
 
         public enum AttackMethod
         {
-            [Display(Name = "Straight")]
+            [Display(Name = "Dictionary attack")]
             Straight = 0,
             [Display(Name = "Combination")]
             Combination = 1,

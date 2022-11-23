@@ -1,8 +1,7 @@
-﻿using CsvHelper.Configuration.Attributes;
-
+﻿
 namespace WebHash.Services
 {
-    public class CsvLine
+    public class CsvHash
     {
         public string Hash { get; set; }
         public string HashType { get; set; }

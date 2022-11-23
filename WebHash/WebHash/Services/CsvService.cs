@@ -20,16 +20,16 @@ namespace WebHash.Services
             _loggerService = loggerService;
         }
 
-        public IEnumerable<CsvLine> ImportCsvFile(string filePath)
+        public IEnumerable<CsvHash> ImportCsvFile(string filePath)
         {
             var readedHashes = ReadFromCsv(filePath);
 
             return readedHashes;
         }
 
-        private IEnumerable<CsvLine> ReadFromCsv(string filePath)
+        private IEnumerable<CsvHash> ReadFromCsv(string filePath)
         {
-            var hashes = new List<CsvLine>();
+            var hashes = new List<CsvHash>();
             var badReaderLines = new List<string>();
             if (!string.IsNullOrEmpty(filePath))
             {
@@ -44,7 +44,7 @@ namespace WebHash.Services
 
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
-                            hashes = csv.GetRecords<CsvLine>().Select(x => x).ToList();
+                            hashes = csv.GetRecords<CsvHash>().Select(x => x).ToList();
                             return hashes.Count() > 0 ? hashes.Where(x => x.Hash != null).ToList() : null;
                         }
                     }
